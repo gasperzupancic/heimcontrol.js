@@ -1,0 +1,10 @@
+each item in items
+  div.plugin-container.dht22(class=item.method)
+    - if (item.method == 'sensor')
+      p.description
+        strong #{item.description}&nbsp; 
+        span.muted PIN #{item.pin}
+      div.large
+        p
+          span.value(data-id="#{item._id}") #{item.value}
+          | &nbsp;#{item.unit}
