@@ -2,7 +2,7 @@ if (typeof define !== 'function') {
   var define = require('amdefine')(module);
 }
 
-define([ 'node-dht-sensor' ], function(dhtSensor) {
+define([ 'node-dht-sensor' ], function(dhtsensor) {
 
   /**
    * DHT22 Plugin. This plugin is able to control an DHT22 that is attached to the GPIO of the Raspberry PI
@@ -62,40 +62,35 @@ define([ 'node-dht-sensor' ], function(dhtSensor) {
         if ((!err) && (result.length > 0)) {
           result.forEach(function(item) {
             that.sensors[item._id] = item;
-	    console.log("before sensor");
-            var sensor = {
-  		initialize: function() {
-			console.log("dht22 init");
-			//console.log(dhtSensor);
-			console.log("pin " + item.pin);
-    			return new dhtSensor.initialize(22, item.pin);
-  		},
-  		read: function() {
-			console.log("dht22 read");
-    			var readout = dhtSensor.read();
+	    
+  	    var sensor = { _id: item._id, timer: null,
+		    initialize: function() {
+		    		return dhtsensor.initialize(22, parseInt(item.pin));
+	    	    },
+		    read: function() {
+    			var readout = dhtsensor.read();
 			item = that.sensors[this._id + ''];
               		if (isNaN(item.value)) {
                 		item.value = 0;
               		}
-              		item.value = parseFloat((readout.temperature).toFixed(2));
+              		item.value = [ parseFloat((readout.temperature).toFixed(2)), parseFloat((readout.humidity).toFixed(2)) ];
               		that.values[item._id] = item.value;
               		that.app.get('sockets').emit('dht22-sensor', {
                 		id: item._id,
                 		value: item.value
               		});
-			console.log("item: " + item);
     			console.log('Temperatura: '+readout.temperature+'C, humidity: '+readout.humidity+'%');
-    			setTimeout(function() {
+    			timer = setTimeout(function() {
       				sensor.read();
-    			}, 5000);
-  		}
+    			}, 15000);
+  		    },
+		    removeAllListeners: function() {
+			    clearTimeout(timer);
+		    }
 	    };
-	    console.log("after sensor");
-	    if (sensor.initialize()) {
-  	    	sensor.read.bind(that);
-	    } else {
-  	     console.warn('Failed to initialize sensor');
-	    } 
+	    sensor.initialize();
+  	    sensor.read();
+	    
 	    sensor._id = item._id;
             that.sensorList.push(sensor);
           });
