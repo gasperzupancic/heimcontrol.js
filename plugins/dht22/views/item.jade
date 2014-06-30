@@ -6,7 +6,10 @@ each item in items
         span.muted PIN #{item.pin}
       div.large
         p
-          span.value(data-id="#{item._id}") #{item.value[0]} 
-          | &nbsp;&deg;#{item.unit}
-          span.value(data-id="#{item._id}") #{item.value[1]}
-          | &nbsp;&percnt;
+          span.temp T:&nbsp;
+          span.value(data-id="#{item._id}t") #{item.value[0]}
+          | &deg;#{item.unit}
+        p
+          span.hum H:&nbsp;
+          span.value(data-id="#{item._id}h") #{item.value[1]}
+          | &percnt;

@@ -7,7 +7,8 @@ require([ "jquery", "/socket.io/socket.io.js" ], function() {
    * DHT22 sensor data received
    */
   socket.on('dht22-sensor', function(data) {
-    $('.value[data-id="' + data.id + '"]').text(data.value);
+    $('.value[data-id="' + data.id + 't"]').text(data.value[0]);
+    $('.value[data-id="' + data.id + 'h"]').text(data.value[1]);
   });
 
 });

@@ -74,12 +74,14 @@ define([ 'node-dht-sensor' ], function(dhtsensor) {
                 		item.value = 0;
               		}
               		item.value = [ parseFloat((readout.temperature).toFixed(2)), parseFloat((readout.humidity).toFixed(2)) ];
-              		that.values[item._id] = item.value;
-              		that.app.get('sockets').emit('dht22-sensor', {
-                		id: item._id,
-                		value: item.value
-              		});
-    			console.log('Temperatura: '+readout.temperature+'C, humidity: '+readout.humidity+'%');
+                        console.log('temperature: '+item.value[0]+'C, humidity: '+item.value[1]+'%');
+			if ( item.value[0] !== 0 && item.value[1] > 1) { 
+              			that.values[item._id] = item.value;
+              			that.app.get('sockets').emit('dht22-sensor', {
+                			id: item._id,
+                			value: item.value
+              			});
+			}
     			timer = setTimeout(function() {
       				sensor.read();
     			}, 15000);
