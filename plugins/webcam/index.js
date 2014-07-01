@@ -29,7 +29,7 @@ define([ 'child_process', 'delivery', 'fs', 'http' ], function( ChildProcess, De
      * 
      * Microsoft® LifeCam HD-3000: 640x480, 1280x720, 960x544, 800x448, 640x360, 424x240, 352x288, 320x240, 800x600, 176x144, 160x120, 1280x800
      */
-    this.webcamResolution = '960x544';
+    this.webcamResolution = '1280x720';
 
     this.webcamList = [];
     this.webcams = {};
@@ -151,7 +151,9 @@ define([ 'child_process', 'delivery', 'fs', 'http' ], function( ChildProcess, De
   Webcam.prototype.streamer = function(input, output, resolution, callback) {
 
     var exec = ChildProcess.exec;
-    var cmd = 'streamer -c ' + input + ' -o ' + output + ' -s ' + resolution;
+    //var cmd = 'streamer -c ' + input + ' -o ' + output + ' -s ' + resolution;
+    var width = resolution.split("x")[0], height = resolution.split("x")[1];
+    var cmd = 'raspistill -tl 0 -t0 -n -o ' + output + ' -w ' + width + ' -h ' + height + ' -br 70 -co 90 -ISO 800 -ex off ';
     exec(cmd, function(err, stdout, stderr) {
       if(err) {
         callback(err);
@@ -172,12 +174,13 @@ define([ 'child_process', 'delivery', 'fs', 'http' ], function( ChildProcess, De
   Webcam.prototype.beforeRender = function(items, callback) {
     var that = this;
     var devList = Fs.readdirSync('/dev/');
-    var deviceList = [];
-    devList.forEach(function(dev) {
+    var deviceList = ['/dev/video0'];
+    /*devList.forEach(function(dev) {
       if (dev.substr(0,5) == 'video') {
         deviceList.push('/dev/' + dev);
       }
     })
+    */
     items.forEach(function(item) {
       if (deviceList.indexOf(item.input)==-1) {
         console.log('Webcam Plugin: Device "' + item.input + '" not found.');

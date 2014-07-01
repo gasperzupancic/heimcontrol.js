@@ -1,4 +1,4 @@
-require(["jquery", "bootstrap.min", "/socket.io/socket.io.js"], function() {
+require(["jquery", "bootstrap.min", "/socket.io/socket.io.js", "raphael", "charts.min"], function() {
 
   var socket = io.connect();
 

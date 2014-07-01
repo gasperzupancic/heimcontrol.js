@@ -1,9 +1,9 @@
 {
   "port": 8080,
-  "secret": "CHANGE_ME",
+  "secret": "heim",
   "mongo": {
-    "host" : "127.0.0.1",
-    "name" : "heimcontroljs",
+    "host" : "localhost",
+    "name" : "heimcontrol",
     "port" : "27017",
     "user" : {}
   }
