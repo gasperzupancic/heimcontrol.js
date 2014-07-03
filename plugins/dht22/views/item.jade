@@ -1,15 +1,19 @@
 each item in items
-  div.plugin-container.dht22(class=item.method)
+  div.plugin-container.dht22(class=item.method, id="#{item._id}")
     - if (item.method == 'sensor')
       p.description
         strong #{item.description}&nbsp; 
         span.muted PIN #{item.pin}
       div.large
-        p
-          span.temp T:&nbsp;
+        p.temp
+          span T:&nbsp;
           span.value(data-id="#{item._id}t") #{item.value[0]}
           | &deg;#{item.unit}
+          span.chart(style="width: 500px; height: 40px;")
         p
-          span.hum H:&nbsp;
+          br 
+        p.hum
+          span H:&nbsp;
           span.value(data-id="#{item._id}h") #{item.value[1]}
           | &percnt;
+          span.chart(style="width: 500px; height: 40px;")
