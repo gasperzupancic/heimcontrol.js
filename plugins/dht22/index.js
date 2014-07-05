@@ -77,9 +77,9 @@ define([ 'node-dht-sensor' ], function(dhtsensor) {
                 		item.value = 0;
               		}
               		item.value = [ parseFloat((readout.temperature).toFixed(2)), parseFloat((readout.humidity).toFixed(2)) ];
-                        console.log('temperature: '+item.value[0]+'C, humidity: '+item.value[1]+'%');
 			if ( item.value[0] !== 0 && item.value[1] >= 1 && item.value[1] <= 100) { 
-              			that.values[item._id] = item.value;
+	                        console.log('temperature: '+item.value[0]+'C, humidity: '+item.value[1]+'%');
+				that.values[item._id] = item.value;
               			that.app.get('sockets').emit('dht22-sensor', {
                 			id: item._id,
                 			value: item.value
@@ -127,17 +127,18 @@ define([ 'node-dht-sensor' ], function(dhtsensor) {
       item.value = that.values[item._id] ? that.values[item._id] : 0;
     });
     return callback(null, items);
-  }
+  };
 
   DHT22.prototype.chartData = function(items, callback) {
     var that = this;
     var humArr = [], tempArr = []; 
     items.forEach(function(item)  {
-	t = [item.]    
-	tempArr.append();    
-    }  
-
-  }
+	tempArr.push([item.timestamp, item.temp]);	
+ 	humArr.push([item.timestamp, item.hum]);
+    });  
+    items = [tempArr, humArr];
+    return callback(null, items);
+  };
 
   /**
    * API functions of the DHT22 Plugin
@@ -167,12 +168,16 @@ define([ 'node-dht-sensor' ], function(dhtsensor) {
               });
             });
       } else if(method === "logs") {
-	var sensor_id = req.body.sensor_id ? req.body.sensor_id;      
+	var sensor_id = req.body.sensor_id ? new require('mongodb').ObjectID(req.body.sensor_id) : null;      
     	var timespan = req.body.timespan ? req.body.timespan : 24 * 3600;
+	if ( sensor_id == null ) {
+		res.send(500, '[]');
+	}
 	this.app.get('db').collection("DHT22_logs", function(err, collection) {
-            collection.find({ sensor_id : sensor_id , timestamp : { $gt : (Math.round(new Date().getTime()/1000.0) - timespan)  } }, { _id : 0, sensor_id : 0 }).toArray(function(err, items) {
+	    console.log(" sensor id: " + sensor_id + " timespan " + timespan);
+	    collection.find({ sensor_id : sensor_id , timestamp : { $gt : (Math.round(new Date().getTime()/1000.0) - timespan)  } }, { _id : 0, sensor_id : 0 }).toArray(function(err, items) {
               if (!err) {
-              that.beforeRender(items, function() {
+              that.chartData(items, function() {
                 res.send(200, items);
                 });
               } else {
@@ -185,7 +190,6 @@ define([ 'node-dht-sensor' ], function(dhtsensor) {
       }
     }
   };
-
 
   var exports = DHT22;
 
