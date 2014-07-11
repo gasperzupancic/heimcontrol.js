@@ -1,4 +1,4 @@
-require(["jquery", "bootstrap.min", "/socket.io/socket.io.js", "raphael", "charts.min"], function() {
+require(["jquery", "bootstrap.min", "/socket.io/socket.io.js", "raphael", "highcharts"], function() {
 
   var socket = io.connect();
 
@@ -148,5 +148,11 @@ require(["jquery", "bootstrap.min", "/socket.io/socket.io.js", "raphael", "chart
       }
     });
 
+  });
+
+  Highcharts.setOptions({
+    global: {
+        useUTC: false
+    }
   });
 });
