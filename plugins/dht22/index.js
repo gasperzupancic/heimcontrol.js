@@ -72,6 +72,9 @@ define([], function() {
       
         var sensor = { _id: item._id, timer: null,
         initialize: function() {
+            that.app.get('db').collection(that.logs_collection, function(err, collection) {
+              collection.ensureIndex({ "timestamp" : 1});
+            });
             return //dhtsensor.initialize(22, parseInt(item.pin));
             },
         read: function() {
