@@ -15,8 +15,6 @@ require([ "jquery", "/socket.io/socket.io.js" ], function() {
     var chart = $('#' + data.id + '-graph').highcharts();
     
     d = new Date();
-    //temp.push( [ d, data.value[0] ] );
-    //hum.push( [ d, data.value[1] ] );
     var series = chart.series[0],
         shift = series.data.length > 20; // shift if the series is 
                                                  // longer than 20

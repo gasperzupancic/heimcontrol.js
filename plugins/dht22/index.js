@@ -6,8 +6,8 @@ function rand( from, to ) {
     return Math.floor(Math.random()*(to-from+1)+from);
 }
 
-//define([ 'node-dht-sensor' ], function(dhtsensor) {
-define([], function() {
+define([ 'node-dht-sensor' ], function(dhtsensor) {
+//define([], function() {
   /**
    * DHT22 Plugin. This plugin is able to control an DHT22 that is attached to the GPIO of the Raspberry PI
    *
@@ -79,10 +79,10 @@ define([], function() {
                 }
               });
             });
-            return //dhtsensor.initialize(22, parseInt(item.pin));
+            return dhtsensor.initialize(22, parseInt(item.pin));
             },
         read: function() {
-          var readout = { temperature: rand(20,30), humidity: rand(50,90) }; //dhtsensor.read();
+          var readout = dhtsensor.read();
       item = that.sensors[this._id + ''];
                   if (isNaN(item.value)) {
                     item.value = 0;
