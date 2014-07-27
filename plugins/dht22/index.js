@@ -107,7 +107,7 @@ define([ 'node-dht-sensor' ], function(dhtsensor) {
       }
           timer = setTimeout(function() {
               sensor.read();
-          }, 30000);
+          }, 60000);
           },
         removeAllListeners: function() {
           clearTimeout(timer);
