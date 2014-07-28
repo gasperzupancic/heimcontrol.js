@@ -14,13 +14,14 @@ require([ "jquery", "/socket.io/socket.io.js" ], function() {
 
     var chart = $('#' + data.id + '-graph').highcharts();
     
-    d = new Date();
+    d = new Date().getTime();
     var series = chart.series[0],
         shift = series.data.length > 20; // shift if the series is 
                                                  // longer than 20
     // add the point
-    chart.series[0].addPoint([ d, data.value[0] ], true, shift);
-    chart.series[1].addPoint([ d, data.value[1] ], true, shift);
+    chart.series[0].addPoint([ d, data.value[0] ], false, shift);
+    chart.series[1].addPoint([ d, data.value[1] ], false, shift);
+    chart.redraw();
     
   });
  
